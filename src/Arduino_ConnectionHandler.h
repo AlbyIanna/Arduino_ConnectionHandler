@@ -115,6 +115,13 @@ class ConnectionHandler {
 
 #if defined(ARDUINO_ESP8266_ESP12) || defined(ARDUINO_ARCH_ESP32) || defined(ESP8266)
   #ifdef ARDUINO_ESP8266_ESP12
+    // Hack for using with ArduinoBearSSL
+    // The ESP8266 core has a bundled version of BearSSL with a new custom
+    // br_ssl_engine_get_mfln_negotiated function
+    static inline uint8_t br_ssl_engine_get_mfln_negotiated(void*) {
+      return 0;
+    }
+
     #include <ESP8266WiFi.h>
   #else
     #include <WiFi.h>
