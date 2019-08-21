@@ -91,10 +91,10 @@ void WiFiConnectionHandler::execNetworkEventCallback(OnNetworkEventCallback & ca
 }
 
 unsigned long WiFiConnectionHandler::getTime() {
-#if !defined(ARDUINO_ESP8266_ESP12) && !defined(ARDUINO_ARCH_ESP32) && !defined(ESP8266)
-  return WiFi.getTime();
+#if defined(ARDUINO_ESP8266_ESP12) || defined(ARDUINO_ARCH_ESP32) || defined(ESP8266)
+  return time(NULL);
 #else
-  return 0;
+  return WiFi.getTime();
 #endif
 }
 
