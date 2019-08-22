@@ -178,8 +178,15 @@ void WiFiConnectionHandler::update() {
         Debug.print(DBG_VERBOSE, "NetworkConnectionState::GETTIME");
 #if defined(ARDUINO_ESP8266_ESP12) || defined(ARDUINO_ARCH_ESP32) || defined(ESP8266)
         configTime(0, 0, "time.arduino.cc", "pool.ntp.org", "time.nist.gov");
-#endif
+        /* Only change to the connected state once we do have valid time
+         * obtained via NTP.
+         */
+        if(time(nullptr) > 8 * 3600) {
+          changeConnectionState(NetworkConnectionState::CONNECTED);
+        }
+#else
         changeConnectionState(NetworkConnectionState::CONNECTED);
+#endif
         }
         break;
       case NetworkConnectionState::DISCONNECTING: {
